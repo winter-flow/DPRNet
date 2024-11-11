@@ -11,6 +11,9 @@
 - Run `python Testing.py`.
 - Run `python eval.py` and `eval_mirror.py`.
 
+## Experimental Results
+You can download our [detection results](https://pan.baidu.com/s/1hkWa8uFYJ_JqStEQsy4oSw)(code: j262)
+
 ## Citation
 If you find this repo useful for your research, please consider citing our paper:
 
