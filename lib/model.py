@@ -6,7 +6,9 @@ import math
 import sys
 from mmcv.cnn import build_norm_layer
 sys.path.insert(0, '../../')
-from lib.pvtv2 import pvt_v2_b2
+from pvtv2 import pvt_v2_b2 # During testing with any sample, this line is used.
+# from lib.pvtv2 import pvt_v2_b2 # During training, this line is used.
+
 
 def np2th(weights, conv=False):
     """Possibly convert HWIO to OIHW."""
@@ -628,7 +630,7 @@ class IDFNet(nn.Module):
     # def __init__(self):
         super().__init__()
         self.backbone = pvt_v2_b2()  # [64, 128, 320, 512]
-        path = './pretrained_pvt/pvt_v2_b2.pth'
+        path = '/data3/zhamingfeng/data/Pretrained_weights/pvt/pvt_v2_b2.pth'
         save_model = torch.load(path)
         model_dict = self.backbone.state_dict()
         state_dict = {k: v for k, v in save_model.items() if k in model_dict.keys()}
@@ -899,13 +901,10 @@ class FGC(nn.Module):
 
 if __name__ =='__main__':
     import os
-    os.environ['CUDA_VISIBLE_DEVICES'] = '3'
-    from thop import profile
-    net = SARNet('pvt_v2_b3').cuda()
-    data = torch.randn(1, 3, 672, 672).cuda()
-    flops, params = profile(net, (data,))
-    print('flops: %.2f G, params: %.2f M' % (flops / (1024*1024*1024), params / (1024*1024)))
-    y = net(data)
-    for i in y:
-        print(i.shape)
+    os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+    net = IDFNet().cuda()
+    data = torch.randn(1, 3, 384, 384).cuda()
+    y1,y2,y3,y4,y5 = net(data)
+    print(y1.shape,y2.shape,y3.shape,y4.shape,y5.shape)
+
 
